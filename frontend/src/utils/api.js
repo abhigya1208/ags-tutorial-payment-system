@@ -6,10 +6,11 @@ import axios from "axios";
 // Use VITE_API_BASE_URL in production; fall back to Vite proxy in dev
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 
+
 const api = axios.create({
   baseURL: `${BASE_URL}/api`,
   headers: { "Content-Type": "application/json" },
-  timeout: 15000, // 15 seconds
+  timeout: 30000, // 30 seconds
 });
 
 // ── Request interceptor: attach JWT if present ─────────────
