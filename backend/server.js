@@ -54,3 +54,8 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅  AGS Tutorial server running on port ${PORT}`);
 });
+
+// Test payment route
+app.post('/api/payment/create-order', (req, res) => {
+  res.json({ success: true, message: 'Test route working' });
+});
