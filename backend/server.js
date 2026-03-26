@@ -11,7 +11,6 @@ const adminRoutes = require("./routes/adminRoutes");
 // ── Connect to MongoDB ─────────────────────────────────────
 connectDB();
 
-// ── Express app ────────────────────────────────────────────
 const app = express();
 
 // ── Middleware ─────────────────────────────────────────────
@@ -29,13 +28,26 @@ app.get("/", (req, res) => {
   res.json({ message: "AGS Tutorial API is running 🚀" });
 });
 
+// ── TEMPORARY DIRECT SEED ROUTE ──────────────────────────
+app.post('/api/auth/seed', async (req, res) => {
+  try {
+    const Admin = require('./models/Admin');
+    const existing = await Admin.findOne({ username: 'admin.ags@edu' });
+    if (existing) {
+      return res.json({ success: true, message: 'Admin already exists' });
+    }
+    await Admin.create({ username: 'admin.ags@edu', password: 'Abhigya@1208' });
+    res.json({ success: true, message: 'Admin created successfully' });
+  } catch (error) {
+    console.error('Seed error:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 // ── Routes ─────────────────────────────────────────────────
 app.use("/api/auth", authRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/admin", adminRoutes);
-
-
-
 
 // ── 404 handler ────────────────────────────────────────────
 app.use((req, res) => {
