@@ -10,7 +10,7 @@ export default function AdminLogin() {
   const navigate = useNavigate();
   const { login, isAuthenticated } = useAuth();
 
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
@@ -30,7 +30,7 @@ export default function AdminLogin() {
 
   const validate = () => {
     const newErrors = {};
-    if (!form.email.includes("@")) newErrors.email = "Enter a valid email";
+    if (!form.username.trim()) newErrors.username = "Username is required";
     if (form.password.length < 6) newErrors.password = "Password must be at least 6 characters";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -42,7 +42,7 @@ export default function AdminLogin() {
 
     setLoading(true);
     try {
-      const res = await api.post("/auth/login", form);
+      const res = await api.post("/admin/login", form);
       if (res.data.success) {
         login(res.data.token, res.data.admin);
         navigate("/admin", { replace: true });
@@ -75,22 +75,22 @@ export default function AdminLogin() {
         {/* Card */}
         <div className="glass-card border border-slate-700/50 px-8 py-8">
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
+            {/* Username */}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
-                Email Address
+                Username
               </label>
               <input
-                type="email"
-                name="email"
-                value={form.email}
+                type="text"
+                name="username"
+                value={form.username}
                 onChange={handleChange}
-                placeholder="admin@ags.com"
-                autoComplete="email"
-                className={`form-input ${errors.email ? "border-red-500 focus:ring-red-500" : ""}`}
+                placeholder="admin.ags@edu"
+                autoComplete="username"
+                className={`form-input ${errors.username ? "border-red-500 focus:ring-red-500" : ""}`}
               />
-              {errors.email && (
-                <p className="text-red-400 text-xs mt-1.5">⚠ {errors.email}</p>
+              {errors.username && (
+                <p className="text-red-400 text-xs mt-1.5">⚠ {errors.username}</p>
               )}
             </div>
 
@@ -157,7 +157,7 @@ export default function AdminLogin() {
         {/* Hint */}
         <div className="mt-4 glass-card border border-slate-700/30 px-4 py-3 text-center">
           <p className="text-slate-500 text-xs">
-            Default credentials: <span className="text-violet-400">admin@ags.com</span> / <span className="text-violet-400">Admin@123</span>
+            Default credentials: <span className="text-violet-400">admin.ags@edu</span> / <span className="text-violet-400">Abhigya@1208</span>
           </p>
           <p className="text-slate-600 text-xs mt-1">
             (Run <code className="bg-slate-800 px-1 rounded">/api/auth/seed</code> POST once to create the admin)

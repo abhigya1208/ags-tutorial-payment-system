@@ -8,6 +8,99 @@ import { useAuth } from "../context/AuthContext";
 import Loader from "../components/Loader";
 import { generateReceiptPDF } from "../utils/generatePDF";
 
+// ── Change Password Modal Component ─────────────────────────
+const ChangePasswordModal = ({ isOpen, onClose, onSuccess }) => {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (newPassword !== confirmPassword) {
+      setError("New passwords do not match");
+      return;
+    }
+    if (newPassword.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await api.put("/admin/change-password", { oldPassword, newPassword });
+      onSuccess();
+      onClose();
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to change password");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-sm">
+      <div className="glass-card border border-slate-700/50 rounded-xl w-full max-w-md p-6">
+        <h2 className="text-xl font-bold text-white mb-4">Change Password</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-1">Old Password</label>
+            <input
+              type="password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              required
+              className="form-input w-full"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-1">New Password</label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+              className="form-input w-full"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-1">Confirm New Password</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className="form-input w-full"
+            />
+          </div>
+          {error && <p className="text-red-400 text-sm">{error}</p>}
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 btn-secondary py-2"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 btn-primary py-2"
+            >
+              {loading ? "Updating..." : "Update Password"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const { admin, logout } = useAuth();
@@ -19,6 +112,7 @@ export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterClass, setFilterClass] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showChangePwd, setShowChangePwd] = useState(false);
   const ITEMS_PER_PAGE = 10;
 
   // ── Fetch payments from API ────────────────────────────
@@ -91,8 +185,15 @@ export default function AdminDashboard() {
           </div>
           <div className="flex items-center gap-4">
             <span className="text-slate-400 text-sm hidden sm:block">
-              👤 {admin?.email}
+              👤 {admin?.username || admin?.email}
             </span>
+            <button
+              onClick={() => setShowChangePwd(true)}
+              className="text-slate-400 hover:text-violet-400 text-sm border border-slate-700
+                         hover:border-violet-500/50 px-3 py-1.5 rounded-lg transition-all"
+            >
+              🔑 Change Password
+            </button>
             <button
               onClick={handleLogout}
               className="text-slate-400 hover:text-red-400 text-sm border border-slate-700
@@ -302,6 +403,17 @@ export default function AdminDashboard() {
           </>
         )}
       </main>
+
+      {/* Change Password Modal */}
+      <ChangePasswordModal
+        isOpen={showChangePwd}
+        onClose={() => setShowChangePwd(false)}
+        onSuccess={() => {
+          alert("Password changed successfully! Please login again.");
+          logout();
+          navigate("/admin/login");
+        }}
+      />
     </div>
   );
 }
