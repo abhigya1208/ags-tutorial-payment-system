@@ -1,12 +1,14 @@
 const jwt = require("jsonwebtoken");
 const Admin = require("../models/Admin");
 
+// ── JWT token generator
 const generateToken = (id, username) => {
   return jwt.sign({ id, username }, process.env.JWT_SECRET, {
     expiresIn: "8h",
   });
 };
 
+// ── Admin login
 const loginAdmin = async (req, res) => {
   const { username, password } = req.body;
 
@@ -38,6 +40,7 @@ const loginAdmin = async (req, res) => {
   }
 };
 
+// ── Seed admin (create default admin)
 const seedAdmin = async (req, res) => {
   try {
     const existing = await Admin.findOne({ username: "admin.ags@edu" });
@@ -54,11 +57,7 @@ const seedAdmin = async (req, res) => {
   }
 };
 
-// ──────────────────────────────────────────────────────────
-//  PUT /api/admin/change-password
-//  Body: { oldPassword, newPassword }
-//  Requires JWT (admin logged in)
-// ──────────────────────────────────────────────────────────
+// ── Change password
 const changePassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const adminId = req.admin.id; // from JWT middleware

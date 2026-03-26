@@ -42,13 +42,13 @@ export default function AdminLogin() {
 
     setLoading(true);
     try {
-      const res = await api.post("/admin/login", form);
+      const res = await api.post("/api/a/login", form); // <-- /api added for Render
       if (res.data.success) {
         login(res.data.token, res.data.admin);
         navigate("/admin", { replace: true });
       }
     } catch (err) {
-      setApiError(err.message || "Login failed. Please check your credentials.");
+      setApiError(err.response?.data?.message || "Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }

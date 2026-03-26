@@ -1,24 +1,26 @@
-// ─────────────────────────────────────────────────────────────
-//  routes/adminRoutes.js  –  Protected admin routes
-// ─────────────────────────────────────────────────────────────
 const express = require("express");
 const router = express.Router();
+
+const { loginAdmin, seedAdmin, changePassword } = require("../controllers/authController");
 const { getAllPayments, getPaymentById } = require("../controllers/adminController");
-const { loginAdmin, changePassword } = require("../controllers/authController");
 const { protect } = require("../middleware/authMiddleware");
 
-// ── Public routes (no authentication required) ────────────
-// POST /api/admin/login – admin login
+// ── Public routes ──────────────────────────────
+// POST /api/admin/login
 router.post("/login", loginAdmin);
 
-// ── Protected routes (JWT required) ───────────────────────
-// PUT /api/admin/change-password – change admin password
+// POST /api/auth/seed  → temporary admin creation (if needed)
+// Agar tumne pehle seed route server.js me add kiya tha, use hata sakte ho
+router.post("/seed", seedAdmin);
+
+// ── Protected routes (JWT required) ────────────
+// PUT /api/admin/change-password
 router.put("/change-password", protect, changePassword);
 
-// GET /api/admin/payments       – list all paid payments
+// GET /api/admin/payments
 router.get("/payments", protect, getAllPayments);
 
-// GET /api/admin/payments/:id   – single payment detail
+// GET /api/admin/payments/:id
 router.get("/payments/:id", protect, getPaymentById);
 
 module.exports = router;
