@@ -1,4 +1,33 @@
-// ... all existing code up to routes ...
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const connectDB = require("./config/db");
+
+// ── Route imports ──────────────────────────────────────────
+const authRoutes = require("./routes/authRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+
+// ── Connect to MongoDB ─────────────────────────────────────
+connectDB();
+
+// ── Express app ────────────────────────────────────────────
+const app = express();
+
+// ── Middleware ─────────────────────────────────────────────
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    credentials: true,
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ── Health check ───────────────────────────────────────────
+app.get("/", (req, res) => {
+  res.json({ message: "AGS Tutorial API is running 🚀" });
+});
 
 // ── Routes ─────────────────────────────────────────────────
 app.use("/api/auth", authRoutes);
