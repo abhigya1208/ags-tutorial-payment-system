@@ -59,3 +59,8 @@ app.listen(PORT, () => {
 app.post('/api/payment/create-order', (req, res) => {
   res.json({ success: true, message: 'Test route working' });
 });
+
+// Quick test route
+app.get('/api/test-payment', (req, res) => {
+  res.json({ success: true, message: 'Test route works' });
+});
