@@ -34,14 +34,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/admin", adminRoutes);
 
-// ── Test routes (FOR DEBUGGING) ───────────────────────────
-app.post('/api/payment/create-order', (req, res) => {
-  res.json({ success: true, message: 'Test route working' });
-});
 
-app.get('/api/test-payment', (req, res) => {
-  res.json({ success: true, message: 'Test route works' });
-});
+
 
 // ── 404 handler ────────────────────────────────────────────
 app.use((req, res) => {
