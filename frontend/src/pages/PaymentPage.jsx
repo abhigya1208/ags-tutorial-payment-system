@@ -228,8 +228,8 @@ export default function PaymentPage() {
                     name="amount"
                     value={form.amount}
                     onChange={handleChange}
-                    placeholder="Minimum ₹400"
-                    min={400}
+                    placeholder="Minimum ₹50"
+                    min={500}
                     className={`form-input pl-8 ${errors.amount ? "border-red-500 focus:ring-red-500" : ""}`}
                   />
                 </div>
