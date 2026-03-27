@@ -192,7 +192,7 @@ export default function HomePage() {
             💳 Pay Fees Online
           </button>
           <p className="text-slate-500 text-xs mt-4">
-            Minimum ₹400 • Secured by Razorpay • Instant receipt
+            Minimum ₹50 • Secured by Razorpay • Instant receipt
           </p>
         </div>
       </section>
