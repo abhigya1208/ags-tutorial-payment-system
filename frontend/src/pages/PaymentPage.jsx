@@ -41,8 +41,8 @@ export default function PaymentPage() {
       newErrors.studentClass = "Please select your class";
     }
     const amt = Number(form.amount);
-    if (!form.amount || isNaN(amt) || amt < 400) {
-      newErrors.amount = "Minimum amount is ₹400";
+    if (!form.amount || isNaN(amt) || amt < 50) {
+      newErrors.amount = "Minimum amount is ₹50";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -229,7 +229,7 @@ export default function PaymentPage() {
                     value={form.amount}
                     onChange={handleChange}
                     placeholder="Minimum ₹50"
-                    min={500}
+                    min={50}
                     className={`form-input pl-8 ${errors.amount ? "border-red-500 focus:ring-red-500" : ""}`}
                   />
                 </div>

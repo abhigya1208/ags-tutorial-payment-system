@@ -33,10 +33,10 @@ const createOrder = async (req, res) => {
   }
 
   const numericAmount = Number(amount);
-  if (isNaN(numericAmount) || numericAmount < 1) {
+  if (isNaN(numericAmount) || numericAmount < 50) {
     return res
       .status(400)
-      .json({ success: false, message: "Minimum payment amount is ₹400" });
+      .json({ success: false, message: "Minimum payment amount is ₹50" });
   }
 
   try {
