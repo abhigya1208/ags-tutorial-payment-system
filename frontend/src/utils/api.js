@@ -3,9 +3,8 @@
 // ─────────────────────────────────────────────────────────────
 import axios from "axios";
 
-// Use VITE_API_BASE_URL in production; fall back to Vite proxy in dev
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
-
+// Hardcoding the verified backend URL from your Render logs
+const BASE_URL = "https://ags-tutorial-backend-gryz.onrender.com";
 
 const api = axios.create({
   baseURL: `${BASE_URL}/api`,
@@ -29,6 +28,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Extracts the message from the backend response or provides a fallback
     const message =
       error.response?.data?.message ||
       error.message ||
