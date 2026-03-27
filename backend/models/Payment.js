@@ -21,7 +21,7 @@ const paymentSchema = new mongoose.Schema(
     amount: {
       type: Number,
       required: [true, "Amount is required"],
-      min: [400, "Minimum payment amount is ₹400"],
+      min: [50, "Minimum payment amount is ₹50"],
     },
     // Amount in paise (amount × 100) – stored for reference
     amountInPaise: {
