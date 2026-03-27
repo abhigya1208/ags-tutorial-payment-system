@@ -6,6 +6,11 @@ const mongoose = require("mongoose");
 const paymentSchema = new mongoose.Schema(
   {
     // ── Student details ─────────────────────────────────────
+    studentName: {    // ✅ NEW FIELD
+      type: String,
+      required: [true, "Student name is required"],
+      trim: true,
+    },
     mobileNumber: {
       type: String,
       required: [true, "Mobile number is required"],

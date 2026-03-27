@@ -14,6 +14,7 @@ export default function PaymentPage() {
 
   // ── Form state ─────────────────────────────────────────
   const [form, setForm] = useState({
+    studentName: "",      // ✅ NEW FIELD
     mobileNumber: "",
     studentClass: "",
     amount: "",
@@ -34,6 +35,12 @@ export default function PaymentPage() {
   // ── Client-side validation ─────────────────────────────
   const validate = () => {
     const newErrors = {};
+    
+    // ✅ NEW VALIDATION for Student Name
+    if (!form.studentName.trim()) {
+      newErrors.studentName = "Please enter student's full name";
+    }
+    
     if (!/^\d{10}$/.test(form.mobileNumber)) {
       newErrors.mobileNumber = "Enter a valid 10-digit mobile number";
     }
@@ -55,10 +62,11 @@ export default function PaymentPage() {
       amount: orderData.amount,           // in paise
       currency: orderData.currency,
       name: "AGS Tutorial",
-      description: `Class ${form.studentClass} Fee Payment`,
+      description: `${form.studentName} - Class ${form.studentClass} Fee Payment`, // ✅ Updated
       order_id: orderData.orderId,
       prefill: {
         contact: form.mobileNumber,
+        name: form.studentName,           // ✅ NEW
       },
       theme: { color: "#8b5cf6" },
 
@@ -117,6 +125,7 @@ export default function PaymentPage() {
 
     try {
       const res = await api.post("/payment/create-order", {
+        studentName: form.studentName,      // ✅ NEW
         mobileNumber: form.mobileNumber,
         studentClass: form.studentClass,
         amount: Number(form.amount),
@@ -167,6 +176,26 @@ export default function PaymentPage() {
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="px-8 py-8 space-y-5">
+
+              {/* ✅ NEW – Student Name */}
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Student Name <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="studentName"
+                  value={form.studentName}
+                  onChange={handleChange}
+                  placeholder="Enter student's full name"
+                  className={`form-input ${errors.studentName ? "border-red-500 focus:ring-red-500" : ""}`}
+                />
+                {errors.studentName && (
+                  <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
+                    <span>⚠</span> {errors.studentName}
+                  </p>
+                )}
+              </div>
 
               {/* Mobile Number */}
               <div>

@@ -13,17 +13,17 @@ const razorpay = new Razorpay({
 
 // ──────────────────────────────────────────────────────────
 //  POST /api/payment/create-order
-//  Body: { amount, mobileNumber, studentClass }
+//  Body: { studentName, amount, mobileNumber, studentClass }
 //  Creates a Razorpay order and saves a Payment doc (status=created)
 // ──────────────────────────────────────────────────────────
 const createOrder = async (req, res) => {
-  const { amount, mobileNumber, studentClass } = req.body;
+  const { studentName, amount, mobileNumber, studentClass } = req.body;  // ✅ ADDED studentName
 
   // ── Validation ─────────────────────────────────────────
-  if (!amount || !mobileNumber || !studentClass) {
+  if (!studentName || !amount || !mobileNumber || !studentClass) {  // ✅ UPDATED
     return res
       .status(400)
-      .json({ success: false, message: "amount, mobileNumber, and studentClass are required" });
+      .json({ success: false, message: "studentName, amount, mobileNumber, and studentClass are required" });
   }
 
   if (!/^\d{10}$/.test(mobileNumber)) {
@@ -49,6 +49,7 @@ const createOrder = async (req, res) => {
       currency: "INR",
       receipt: `receipt_${Date.now()}`,
       notes: {
+        studentName,      // ✅ ADDED
         mobileNumber,
         studentClass,
       },
@@ -58,6 +59,7 @@ const createOrder = async (req, res) => {
 
     // Save the pending payment in MongoDB
     const payment = await Payment.create({
+      studentName,        // ✅ ADDED
       mobileNumber,
       studentClass,
       amount: numericAmount,

@@ -25,6 +25,7 @@ export default function ReceiptPage() {
   }
 
   const {
+    studentName,           // ✅ NEW FIELD
     mobileNumber,
     studentClass,
     amount,
@@ -40,13 +41,14 @@ export default function ReceiptPage() {
   });
 
   const rows = [
-    { label: "Mobile Number",  value: mobileNumber,         icon: "📱" },
-    { label: "Class",          value: `Class ${studentClass}`, icon: "🎓" },
-    { label: "Amount Paid",    value: `₹ ${Number(amount).toLocaleString("en-IN")}`, icon: "💰", highlight: true },
-    { label: "Payment ID",     value: razorpayPaymentId,    icon: "🔑" },
-    { label: "Order ID",       value: razorpayOrderId,      icon: "📋" },
-    { label: "Date & Time",    value: formattedDate,        icon: "📅" },
-    { label: "Status",         value: "✅ Payment Successful", icon: "✔", success: true },
+    { label: "Student Name",    value: studentName,            icon: "👤" },  // ✅ NEW ROW
+    { label: "Mobile Number",   value: mobileNumber,           icon: "📱" },
+    { label: "Class",           value: `Class ${studentClass}`, icon: "🎓" },
+    { label: "Amount Paid",     value: `₹ ${Number(amount).toLocaleString("en-IN")}`, icon: "💰", highlight: true },
+    { label: "Payment ID",      value: razorpayPaymentId,      icon: "🔑" },
+    { label: "Order ID",        value: razorpayOrderId,        icon: "📋" },
+    { label: "Date & Time",     value: formattedDate,          icon: "📅" },
+    { label: "Status",          value: "✅ Payment Successful", icon: "✔", success: true },
   ];
 
   return (
