@@ -223,6 +223,7 @@ Use Razorpay's test cards / UPI to simulate payments:
 
 ---
 
+
 ## 📜 Licence
 
-MIT – free to use and modify for educational or commercial projects.
+MIT – free to use for learning, ask before use it for commercial purposes. 
